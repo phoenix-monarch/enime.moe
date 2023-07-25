@@ -9,5 +9,6 @@ export async function getSession(req = undefined, res = undefined) {
 
 export async function getUser() {
     const session = await getSession();
+    // @ts-ignore
     return await prisma.user.findUnique({ where: { id: session.userId }, include: { setting: true, profile: true }});
 }

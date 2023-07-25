@@ -3,8 +3,9 @@ import type { Adapter, AdapterAccount } from "next-auth/adapters"
 
 export function PrismaAdapter(p: PrismaClient): Adapter {
     return {
+        // @ts-ignore
         createUser: async (data) => {
-            return p.user.create({ data: {
+            return await p.user.create({ data: {
                     ...data,
                     setting: {
                         create: {}
@@ -14,8 +15,11 @@ export function PrismaAdapter(p: PrismaClient): Adapter {
                     }
             } })
         },
+        // @ts-ignore
         getUser: (id) => p.user.findUnique({ where: { id }, include: { setting: true, profile: true } }),
+        // @ts-ignore
         getUserByEmail: (email) => p.user.findUnique({ where: { email }, include: { setting: true, profile: true } }),
+        // @ts-ignore
         async getUserByAccount(provider_providerAccountId) {
             const account = await p.account.findUnique({
                 where: { provider_providerAccountId },
@@ -23,7 +27,9 @@ export function PrismaAdapter(p: PrismaClient): Adapter {
             })
             return account?.user ?? null
         },
+        // @ts-ignore
         updateUser: ({ id, ...data }) => p.user.update({ where: { id }, data }),
+        // @ts-ignore
         deleteUser: (id) => p.user.delete({ where: { id } }),
         linkAccount: (data) =>
             p.account.create({ data }) as unknown as AdapterAccount,
@@ -31,6 +37,7 @@ export function PrismaAdapter(p: PrismaClient): Adapter {
             p.account.delete({
                 where: { provider_providerAccountId },
             }) as unknown as AdapterAccount,
+        // @ts-ignore
         async getSessionAndUser(sessionToken) {
             const userAndSession = await p.session.findUnique({
                 where: { sessionToken },

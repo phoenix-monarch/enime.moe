@@ -31,10 +31,12 @@ export const skipOpEd = () => ({
         $dom.onclick = function () {
             let [opDuration, edDuration] = durations;
 
+            // @ts-ignore
             if (opDuration?.length && player.currentTime >= opDuration[0] && player.currentTime <= opDuration[1]) {
                 player.seek(opDuration[1]);
             }
 
+            // @ts-ignore
             if (edDuration?.length && player.currentTime >= edDuration[0] && player.currentTime <= edDuration[1]) {
                 player.seek(edDuration[1]);
             }
@@ -44,6 +46,7 @@ export const skipOpEd = () => ({
             let [opDuration, edDuration] = durations;
 
             let timeInRange = false;
+            // @ts-ignore
             if ((opDuration?.length && player.currentTime >= opDuration[0] && player.currentTime <= opDuration[1]) || (edDuration?.length && player.currentTime >= edDuration[0] && player.currentTime <= edDuration[1])) timeInRange = true;
 
             if (!timeInRange) $dom.style.display = "none";

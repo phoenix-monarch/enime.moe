@@ -14,11 +14,11 @@ import { SearchResult } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 
 export default function TopNavigation() {
-    const optsRef = useRef();
+    const optsRef = useRef<HTMLDivElement>();
 
     const [searching, setSearching] = useState(false);
-    const [searchQuery, setSearchQuery] = useState(undefined);
-    const debouncedSearchQuery = useDebounce(searchQuery, 500);
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const debouncedSearchQuery = useDebounce<string>(searchQuery, 500);
 
     const router = useRouter();
 
@@ -49,7 +49,7 @@ export default function TopNavigation() {
 
     return (
         <div className={classNames(styles["nav-cont"], "no-ads")}>
-            <div className={classNames(searching ? "hidden" : null, styles.opts, "flex items-center gap-8 h-full mx-auto relative")} ref={optsRef}>
+            <div className={classNames(searching ? "hidden" : null, styles.opts, "flex items-center gap-8 h-full mx-auto relative")} ref={optsRef as React.RefObject<HTMLDivElement>}>
                 <NextLink href="/" className={classNames(styles["navbar-opt"], "text-4xl")}>Explore</NextLink>
                 <div className="grid w-40">
                     <div className={classNames(styles.urmom, styles["navbar-opt"], "text-4xl flex flex-row flex-nowrap items-center px-2")}>
@@ -67,7 +67,7 @@ export default function TopNavigation() {
                 </div>
             </div>
             {searching && (
-                <div ref={searchbarRef} className={classNames(styles.bruh, "m-auto")}>
+                <div ref={searchbarRef as React.RefObject<HTMLDivElement>} className={classNames(styles.bruh, "m-auto")}>
                     <div>
                         <input autoFocus onChange={(e) => setSearchQuery(e.target.value)}
                                placeholder="Search"

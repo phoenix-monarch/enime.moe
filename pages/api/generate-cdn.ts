@@ -16,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let origin = referer ? `https://${new URL(referer).host}/` : undefined;
 
         let proxied = await fetch(`https://cdn.nade.me/generate?url=${encodeURIComponent(r.url)}`, {
+            // @ts-ignore
             headers: {
                 "x-origin": origin || "none",
                 "x-referer": referer || "none",

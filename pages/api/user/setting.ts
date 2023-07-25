@@ -15,6 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const body = req.body;
         if (!is(body, settingOption)) return res.json({ message: "Invalid request" });
 
+        // @ts-ignore
         await prisma.setting.update({
             where: {
                 userId: user.id

@@ -1,7 +1,7 @@
 'use client';
 
 import { enimeApi } from '@/lib/constant';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AniSkip, Episode } from '@/lib/types';
 import { sourceUrlToName } from '@/lib/helper';
 import { skipOpEd } from '@/lib/player/plugin/skip-op-ed';
@@ -25,6 +25,7 @@ export default function EnimePlayer(props) {
 
     useEffect(() => {
         if (playerRef.current) return;
+        // @ts-ignore
         playerRef.current = Player.make(playerContainerRef.current, {
             volume: setting?.volume * 0.01 || 1
         })
@@ -59,6 +60,7 @@ export default function EnimePlayer(props) {
                 }
             })
             .on('videosourcechanged', () => {
+                // @ts-ignore
                 playerRef.current.loader?.on('hlsManifestParsed', (data) => {
                     console.log(data);
                 });
@@ -74,6 +76,7 @@ export default function EnimePlayer(props) {
             .then(r => {
                 setSource({
                     ...sources[sourceIndex],
+                    // @ts-ignore
                     url: r,
                 });
             })
@@ -81,7 +84,9 @@ export default function EnimePlayer(props) {
 
     useEffect(() => {
         if (source) {
+            // @ts-ignore
             playerRef.current.changeSource({
+                // @ts-ignore
                 src: source.url,
                 ...(poster && {
                     poster: poster,
@@ -106,7 +111,9 @@ export default function EnimePlayer(props) {
                                                 time: startTime,
                                                 text: result.skipType === "op" ? "OP" : "ED"
                                             });
+                                            // @ts-ignore
                                             if (result.skipType === "op") opDuration.push(startTime);
+                                            // @ts-ignore
                                             else edDuration.push(startTime);
                                         }
 
@@ -115,24 +122,28 @@ export default function EnimePlayer(props) {
                                                 time: endTime,
                                                 text: result.skipType === "op" ? "OP" : "ED"
                                             });
+                                            // @ts-ignore
                                             if (result.skipType === "op") opDuration.push(endTime);
+                                            // @ts-ignore
                                             else edDuration.push(endTime);
                                         }
                                     }
                                 }
                             }
 
+                            // @ts-ignore
                             playerRef.current.emit("opedchange", [opDuration, edDuration]);
                             // @ts-ignore
                             playerRef.current.plugins.ui.highlight(highlights)
                         });
                 }
-
+                // @ts-ignore
                 if (source.subtitle) {
                     // @ts-ignore
                     playerRef.current.plugins.ui.subtitle.updateSource([
                         {
                             default: true,
+                            // @ts-ignore
                             src: source.subtitle,
                             name: 'English',
                         },
@@ -144,7 +155,7 @@ export default function EnimePlayer(props) {
 
     return (
         <div className={props.className}>
-            <div className="w-full h-full p-0 m-0" ref={playerContainerRef} />
+            <div className="w-full h-full p-0 m-0" ref={playerContainerRef as React.RefObject<HTMLDivElement>} />
         </div>
     )
 }

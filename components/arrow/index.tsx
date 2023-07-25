@@ -25,12 +25,14 @@ export default function Arrow({ children }) {
 
     return (
         <div className="flex flex-row items-center mt-6 left-0 right-0 m-0 p-0 w-full mb-20">
+            { /*@ts-ignore*/ }
             <div onClick={_ => scroll(childRef.current, -1)} className={classNames(styles.button, styles.left, "p-0 w-10 h-10")}>
                 <ArrowIcon className={styles.arrow} color="#FFF" />
             </div>
             {React.cloneElement(children, {
                 ref: childRef
             })}
+            { /*@ts-ignore*/ }
             <div onClick={_ => scroll(childRef.current, 1)} className={classNames(styles.button, styles.right, "p-0 w-10 h-10")}>
                 <ArrowIcon className={styles.arrow} color="#FFF" />
             </div>

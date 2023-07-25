@@ -7,7 +7,9 @@ export const authOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
         DiscordProvider({
+            // @ts-ignore
             clientId: process.env.DISCORD_CLIENT_ID,
+            // @ts-ignore
             clientSecret: process.env.DISCORD_CLIENT_SECRET
         })
     ],

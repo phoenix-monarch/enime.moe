@@ -30,7 +30,7 @@ export function usePageViews({
             if (ignoreHashChange) {
                 newPageViewPath = pathname
             } else {
-                newPageViewPath = pathname + searchParams.toString()
+                newPageViewPath = pathname + (searchParams?.toString() || "")
             }
         }
 
