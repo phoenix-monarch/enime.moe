@@ -10,13 +10,13 @@ export default async function Home() {
     return (
         <>
             <div className="ml-[1%]">
-            <p className="font-bold text-4xl mt-10 pl-5 mb-2">Most Popular</p>
-                <Arrow>
-                    <PopularAnime animes={popularAnimeData} />
-                </Arrow>
-                <p className="font-bold text-4xl mt-4 pl-5 mb-2">Recently Released</p>
+                <p className="font-bold text-4xl mt-10 pl-5">Recently Released</p>
                 <Arrow>
                     <RecentReleaseComponent data={data} meta={meta}/>
+                </Arrow>
+            <p className="font-bold text-4xl mt-4 pl-5 mb-2">Most Popular</p>
+                <Arrow>
+                    <PopularAnime animes={popularAnimeData} />
                 </Arrow>
             </div>
         </>
