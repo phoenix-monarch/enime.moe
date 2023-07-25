@@ -25,7 +25,7 @@ export default async function AnimeInfo({ params }) {
             <div className={classNames(styles.desc, "mb-[5rem]")}>
                 <p className="text-white text-4xl">{ title(animeTitle) }</p>
                 <p className="text-tertiary text-2xl">{ status } • { currentEpisode } Episodes</p>
-                <p className={classNames(styles["desc-text"], "pt-2")}><div dangerouslySetInnerHTML={{ __html: description.replace(/(?:<br>\s*)+/g, `<br>`) }}/></p>
+                <p className={classNames(styles["desc-text"], "pt-2")}><div dangerouslySetInnerHTML={{ __html: description?.replace(/(?:<br>\s*)+/g, `<br>`) || "" }}/></p>
             </div>
             <Arrow>
                 <div className={classNames(styles.eparrows, "flex flex-row flex-nowrap items-center m-0 overflow-x-scroll w-full pr-5 pl-5")}>
