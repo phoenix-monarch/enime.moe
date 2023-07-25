@@ -3,12 +3,12 @@
 import { enimeApi } from '@/lib/constant';
 import { useEffect, useRef, useState } from 'react';
 import { AniSkip, Episode } from '@/lib/types';
-import Player from '@oplayer/core';
-import ui from '@oplayer/ui';
-import hls from '@oplayer/hls';
 import { sourceUrlToName } from '@/lib/helper';
-import { Highlight } from '@oplayer/ui/src/types';
 import { skipOpEd } from '@/lib/player/plugin/skip-op-ed';
+import { Highlight } from '@oplayer/ui';
+import { Player } from '@oplayer/core';
+import hls from '@oplayer/hls';
+import ui from '@oplayer/ui';
 
 export default function EnimePlayer(props) {
     const { sources, number, image, anime } = props.episode as Episode;
@@ -32,7 +32,7 @@ export default function EnimePlayer(props) {
                 skipOpEd(),
                 ui({
                     pictureInPicture: true,
-                    miniProgressBar: setting ? setting.miniProgressBar : true,
+                    miniProgressBar: false,
                     subtitle: { fontSize: 30 },
                     menu: [
                         {
@@ -66,24 +66,17 @@ export default function EnimePlayer(props) {
     }, []);
 
     useEffect(() => {
-        fetch(enimeApi + `/source/${sources[sourceIndex].id}`)
-            .then((res) => res.json())
-            .then((res) => {
-                fetch(`https://cdn.nade.me/generate?url=${encodeURIComponent(res.url)}`, {
-                    headers: {
-                        "x-origin": "none",
-                        "x-referer": "none",
-                        "user-agent": "Mozilla/5.0 (Linux; Android 10; SM-J810F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Mobile Safari/537.36"
-                    }
-                })
-                    .then(r => r.text())
-                    .then(r => {
-                        setSource({
-                            ...res,
-                            url: r,
-                        });
-                    })
-            });
+        fetch("https://enime.moe/api/generate-cdn", {
+            method: "POST",
+            body: sources[sourceIndex].id
+        })
+            .then(r => r.text())
+            .then(r => {
+                setSource({
+                    ...sources[sourceIndex],
+                    url: r,
+                });
+            })
     }, [sourceIndex]);
 
     useEffect(() => {
@@ -130,11 +123,13 @@ export default function EnimePlayer(props) {
                             }
 
                             playerRef.current.emit("opedchange", [opDuration, edDuration]);
+                            // @ts-ignore
                             playerRef.current.plugins.ui.highlight(highlights)
                         });
                 }
 
                 if (source.subtitle) {
+                    // @ts-ignore
                     playerRef.current.plugins.ui.subtitle.updateSource([
                         {
                             default: true,
