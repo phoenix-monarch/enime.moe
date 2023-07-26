@@ -68,7 +68,7 @@ export default function EnimePlayer(props) {
     }, []);
 
     useEffect(() => {
-        fetch("https://enime.moe/api/generate-cdn", {
+        fetch("http://localhost:3000/api/generate-cdn", {
             method: "POST",
             body: sources[sourceIndex].id
         })

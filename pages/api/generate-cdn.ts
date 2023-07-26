@@ -1,5 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { enimeApi } from '@/lib/constant';
+import weightedRandom from '@/lib/random';
+
+const CDN_HOSTS = [
+    "cdn.nade.me",
+    "cdn2.nade.me"
+]
+
+const CDN_WEIGHTS = [
+    2,
+    8
+]
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
@@ -15,7 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let referer = r.referer;
         let origin = referer ? `https://${new URL(referer).host}/` : undefined;
 
-        let proxied = await fetch(`https://cdn.nade.me/generate?url=${encodeURIComponent(r.url)}`, {
+        let host = weightedRandom(CDN_HOSTS, CDN_WEIGHTS)?.item;
+        if (!host) host = "cdn.nade.me";
+
+        let proxied = await fetch(`https://${host}/generate?url=${encodeURIComponent(r.url)}`, {
             // @ts-ignore
             headers: {
                 "x-origin": origin || "none",
@@ -26,6 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         let url = await proxied.text();
+
         return res.send(url);
     } else {
         return res.json({ message: "Invalid method" });

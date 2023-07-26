@@ -16,6 +16,14 @@ import { GoogleAnalytics } from '@/components/analytics';
 import Ad from '@/components/ad';
 import { getSession } from '@/lib/auth';
 import AdBlock from '@/components/ad/block';
+import { DEFAULT_SEO_PROPS } from '@/lib/seo';
+import type { Metadata } from 'next';
+
+// @ts-ignore
+export const metadata: Metadata = {
+  ...DEFAULT_SEO_PROPS,
+};
+
 export default async function RootLayout({
   children,
 }: {

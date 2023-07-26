@@ -8,7 +8,32 @@ import { title } from '@/lib/helper';
 import EpisodeListItem from '@/components/episode-list-item';
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { NextSeo, NextSeoProps } from 'next-seo';
+import { DEFAULT_SEO_PROPS } from '@/lib/seo';
 
+export async function generateMetadata({ params }) {
+    if (!params.anime || !params.number) return {};
+
+    const episode = await (await fetch(enimeApi + `/view/${params.anime}/${params.number}`, { next: { revalidate: 600 }})).json();
+    if (episode.message) return <></>
+
+    const meta: NextSeoProps = {
+        ...DEFAULT_SEO_PROPS,
+        title: `Episode ${ episode.number } ${ episode.title ? `- ${episode.title}` : "" } | ${ title(episode.anime.title) }`,
+        description: episode.description ?? "This episode does not have a description yet.",
+        ...(episode.image && {
+            openGraph: {
+                images: [
+                    {
+                        url: episode.image
+                    }
+                ]
+            }
+        })
+    }
+
+    return meta;
+}
 export default async function Watch({ params }) {
     if (!params.anime || !params.number) return <></>
 

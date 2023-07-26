@@ -6,6 +6,31 @@ import { title } from '@/lib/helper';
 import NextLink from 'next/link';
 import EpisodeListItem from '@/components/episode-list-item';
 import Arrow from '@/components/arrow';
+import { NextSeoProps } from 'next-seo';
+import { DEFAULT_SEO_PROPS } from '@/lib/seo';
+
+export async function generateMetadata({ params }) {
+    const response = await (await fetch(enimeApi + `/anime/${params.slug}`, { next: { revalidate: 60 }})).json();
+
+    if (response?.statusCode === 404) return <></>
+
+    const { bannerImage, coverImage, title: animeTitle, description } = response;
+
+    const meta: NextSeoProps = {
+        ...DEFAULT_SEO_PROPS,
+        title: title(animeTitle),
+        description: description,
+        openGraph: {
+            ...((bannerImage || coverImage) && {
+                images: [{
+                    url: bannerImage || coverImage
+                }]
+            })
+        }
+    }
+
+    return meta;
+}
 
 export default async function AnimeInfo({ params }) {
     const response = await (await fetch(enimeApi + `/anime/${params.slug}`, { next: { revalidate: 60 }})).json();
