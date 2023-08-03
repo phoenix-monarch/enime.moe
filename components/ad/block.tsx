@@ -31,10 +31,6 @@ export default function AdBlock({ className }) {
     }, []);
 
     return (
-        <ins
-            className={classNames("adsbygoogle", className ?? "")}
-            data-ad-client="ca-pub-2103276838446130"
-            data-ad-format="auto"
-        ></ins>
+        <></>
     )
 }
