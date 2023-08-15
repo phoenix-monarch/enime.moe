@@ -8,8 +8,8 @@ const CDN_HOSTS = [
 ]
 
 const CDN_WEIGHTS = [
-    2,
-    8
+    5,
+    5
 ]
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -27,7 +27,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let origin = referer ? `https://${new URL(referer).host}/` : undefined;
 
         let host = weightedRandom(CDN_HOSTS, CDN_WEIGHTS)?.item;
-        if (!host) host = "cdn.nade.me";
 
         let proxied = await fetch(`https://${host}/generate?url=${encodeURIComponent(r.url)}`, {
             // @ts-ignore
